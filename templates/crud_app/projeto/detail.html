@@ -1,0 +1,26 @@
+{% extends 'crud_app/base.html' %}
+{% load static %}
+{% block title %}<title>{{ conta.desc }}</title>{% endblock title %}
+{% block content %}
+<h1 class="d-flex justify-content-center mt-3">Detalhes</h1>
+<main>
+    <div class="jumbotron container">
+        <h2>Conta:</h2>
+        <hr>
+        <p class="mb-5">{{conta.desc}}</p>
+        <h2 class="mt-5">Fornecedor:</h2>
+        <hr>
+        <p>{{conta.fornecedor}}</p>
+        <p>{{fornecedor.documento}}</p>
+        <div class="text-center mt-5 pt-5">
+            <a href="{% url 'crud_app:list' %}" class="mx-3" title="Ver Tabela"><button class="btn btn-secondary">Voltar</button></a>
+            <a href="{% url 'crud_app:update' pk=conta.pk %}" class="mx-3" title="Editar Conta"><button class="btn btn-primary">Editar</button></a>
+            <a href="{% url 'crud_app:delete' pk=conta.pk %}" class="mx-3" title="Excluir Conta"><button class="btn btn-danger">Excluir</button></a>
+        </div>
+    </div>
+</main>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/tabela.js' %}"></script>
+    <script src="{% static 'js/exportExcel.js' %}"></script>
+{% endblock scripts %}

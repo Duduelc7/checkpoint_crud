@@ -1,0 +1,29 @@
+{% extends 'crud_app/base.html' %} 
+{% load static %} 
+{% load crispy_forms_tags%} 
+{% block title %}
+<title>Cadastro</title>
+{% endblock title %} 
+{% block content %}
+<h1 class="d-flex justify-content-center mt-3">
+  Cadastro de Contas e Fornecedores
+</h1>
+<main>
+  <div class="sg-container mt-4 p-4">
+    <form action="" class="sg-content" method="POST">
+      {% csrf_token %} 
+      
+      {{ form|crispy }}
+      <div class="col text-center mb-4 mt-5">
+        <hr>
+        <button type="submit" class="btn btn-warning btn-block">Adicionar</button>
+      </div>
+    </form>
+    <hr>
+    <a href="{% url 'crud_app:list' %}"><button class="btn btn-secondary btn-block mx-5">Voltar</button></a>
+  </div>
+</main>
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'js/tabela.js' %}"></script>
+{% endblock scripts %}

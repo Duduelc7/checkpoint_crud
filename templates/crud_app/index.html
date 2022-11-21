@@ -1,0 +1,13 @@
+{% extends 'crud_app/base.html' %}
+{% load static %}
+{% block styles %}
+	<link rel="stylesheet" href="{% static 'css/index.css' %}">    
+{% endblock  %}
+
+{% block content %}
+	<div class="image-background mt-0"><img src="{% static 'img/Safegold-Background.jpg' %}"></div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'crud_app/js/index.js' %}"></script>
+
+{% endblock scripts %}

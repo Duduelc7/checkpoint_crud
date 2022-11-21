@@ -1,0 +1,54 @@
+{% extends 'crud_app/base.html' %}
+{% load static %}
+{% block title %}<title>{{ conta.desc }}</title>{% endblock title %}
+{% block content %}
+
+<main class="sg-container mt-3">
+    <h1 class="d-flex justify-content-center my-3">Detalhes</h1>
+    <div class="jumbotron container sg-content">
+        
+        <div class="row mb-5">
+            <h2>Empresa</h2>
+            <hr>
+            <h5>{{empresas.empresa}}</h5>
+        </div>
+        <div class="row mb-5">
+            <div class="col">
+                <h2>CNPJ</h2>
+                <hr>
+                <h5>{{empresas.cnpj}}</h5>
+            </div>
+            <div class="col">
+                <h2>Projeto</h2>
+                <hr>
+                <h5>{{empresas.cod_projeto}}</h5>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col">
+                <h2>Data Cadastro</h2>
+                <hr>
+                <h5>{{empresas.data_cadastro}}</h5>
+            </div>
+            <div class="col">
+                <h2>Data Atualização</h2>
+                <hr>
+                <h5>{{empresas.data_atualiza}}</h5>
+            </div>
+        </div>
+        <div class="row mb-5">
+            
+        </div>
+    </div>
+</main>
+<footer class="footer fixed-bottom ignore-on-print pb-3 sg-dark">
+    <div class="text-center pt-3">
+        <a href="{% url 'crud_app:empresa-list' %}" class="mx-3" title="Ver Tabela"><button class="btn btn-lg btn-light">Voltar</button></a>
+        <a href="{% url 'crud_app:empresa-update' pk=empresas.pk %}" class="mx-3" title="Editar Conta"><button class="btn btn-lg btn-primary">Editar</button></a>
+        <a href="{% url 'crud_app:empresa-delete' pk=empresas.pk %}" class="mx-3" title="Excluir Conta"><button class="btn btn-lg btn-danger">Excluir</button></a>
+    </div>
+</footer>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/ExportPDF.js' %}"></script>
+{% endblock scripts %}

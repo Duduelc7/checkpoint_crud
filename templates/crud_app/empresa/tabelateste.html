@@ -1,0 +1,337 @@
+{% extends 'crud_app/base.html' %}
+{% load static %}
+{% load crispy_forms_tags%} 
+{% block title %}<title>Tabela</title>{% endblock title %}
+{% block content %}
+<main>
+    <div id="print-info" class="text-center"></div>
+    <div class="container-fluid" style="margin-bottom:150px;">
+        <div class="row">
+            <div id ="insert_data" class="col sg-container mt-2 mx-3 ignore-on-print">
+                <h3 class="text-center">TABELA PARA TESTES</h3>
+                <form class="sg-content" id = "sg_form">
+                    {% csrf_token %} 
+                    
+
+
+                
+                    <div class="col text-center mb-1 mt-1">
+                        <input type="button" name="submit" class="btn btn-warning btn-block btn-info btn-insert-data" value="Adicionar" id='btn'>
+                    </div>
+                    <div class="form-group">
+                        <div class="alert alert-success" id="ins_success" style="display:none">
+          
+                        </div>
+                         <div class="alert alert-danger" id="ins_error" style="display:none">
+                            
+          
+                        </div>
+                    </div>
+                </form>
+            </div>
+                    <!--======================================= FILTRAR =======================================-->
+
+            <div class="col sg-container mt-2 mx-3 ignore-on-print">
+                <h3 class="text-center">Filtrar</h3>
+                <div class="sg-content">
+                    {% csrf_token %} 
+                    
+                    <!--======================================= APAGAR DEPOIS, SOMENTE PARA TESTES =======================================-->
+                    <div class="form-group form-group-sm my-3 ml-3 mr-3">
+                        <label for="idFilter">ID</label>
+                        <input type="text" name="id" id="idFilter" class="form-control" aria-la bel="Large" placeholder="Filtrar por ID" onkeyup="filtrarPorId()"/>
+                    </div>
+                    <div class="form-group form-group-sm my-3 ml-3 mr-3">
+                        <label for="empresaFilter">Empresa</label>
+                        <input type="text" name="conta" id="empresaFilter" class="form-control" aria-label="Large" placeholder="Filtrar por empresa" onkeyup="filtrarPorEmpresa()" />
+                    </div>
+                    <div class="form-group form-group-sm my-3 ml-3 mr-3">
+                        <label for="projetoFilter">Projeto</label>
+                        <input type="text" name="fornecedor" id="projetoFilter"  class="form-control" aria-label="Large" placeholder="Filtrar por projeto" onkeyup="filtrarPorProjeto()" />
+                    </div>
+                    <div class="form-group form-group-sm my-3 ml-3 mr-3">
+                        <label for="cnpjFilter">CNPJ</label>
+                        <input type="text" name="fornecedor" id="cnpjFilter" class="form-control" aria-label="Large" placeholder="Filtrar por CNPJ" onkeyup="filtrarPorCNPJ()" />
+                    </div>
+                    <!--======================================= APAGAR DEPOIS, SOMENTE PARA TESTES =======================================-->
+                    <div class="col text-center mb-1 mt-1">
+                        <hr>
+                        <button class="btn btn-block btn-success mb-2" id="update_btn">Editar</button>
+                        <button class="btn btn-block btn-success mb-2" id="save_all_btn" style="display:none;margin-top:0px">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="sg-container mt-3 mx-1 mb-5" style="margin-bottom: 1px">
+            <div class="sg-content">
+                <h3 class="text-center mt-1 ignore-on-print">Tabela</h3>
+                <table class="table table-Light table-bordered table-striped mb-3 mt-2 table-responsive table-hover" id="sg-table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="col text-center">ID</th>
+                            <th class="col">Empresa</th>
+                            <th class="col">Projeto</th>
+                            <th class="col">Data Cadastro</th>
+                            <th class="col">Data Atualizado</th>
+                            <th class="col">CNPJ</th>
+                            <th class="col text-center ignore-on-print excludeExport">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        {% for empresas in object_list %}
+                        <tr>
+                            <td class="text-center col-md-1">{{empresas.cod_empresa}}</td>
+                            <td class="editable" data-id="{{empresas.cod_empresa}}" data-type="empresa">{{empresas.empresa}}</td>
+                            <td class="editable" data-id="{{empresas.cod_empresa}}" data-type="cod_projeto">{{empresas.cod_projeto}}</td>
+                            <td class="editable" data-id="{{empresas.cod_empresa}}" data-type="data_cadastro">{{empresas.data_cadastro|date:"d/m/Y H:i" }}</td>
+                            <td class="editable" data-id="{{empresas.cod_empresa}}" data-type="data_atualiza">{{empresas.data_atualiza|date:"d/m/Y H:i" }}</td>
+                            <td class="editable" data-id="{{empresas.cod_empresa}}" data-type="cnpj">{{empresas.cnpj}}</td>
+                            <td class="ignore-on-print excludeExport text-center col-md-2">
+                                <a href="{% url 'crud_app:empresa-detail' pk=empresas.pk %}" class="mx-3" title="Detalhar Conta"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></a>
+                                {% comment %} <button class="btn btn-block btn-delete btn-danger">DELETE</button>                                 {% endcomment %}
+                                <a href="{% url 'crud_app:empresa-delete' pk=empresas.pk %}" class="mx-3" title="Excluir Conta"><i class="fa-solid fa-trash-can"></i></a>
+                            </td>
+                            
+                            
+                        </tr>
+                        
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+<footer class="footer fixed-bottom ignore-on-print">
+    <div class="sg-footer-container">
+        <p>Exportar dados:</p>
+        <button type="button" class="btn btn-outline-dark sg-button" id="exportCSV">CSV</button>
+        <button type="button" class="btn btn-outline-dark sg-button" id="exportPDF">PDF</button>
+    </div>
+</footer>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/ExportPDF.js' %}"></script>
+    <script src="{% static 'js/ExportCSV.js' %}"></script>
+    <script>
+        // SCRIPT DE UPDATE CLICANDO NA TABELA
+        $(document).ready(function(){
+            $(document).on("dblclick",".editable",function(){
+                var value=$(this).text();
+                var data_type=$(this).data("type");
+                var input_type="text";
+                if(data_type=="created_at")
+                {
+                    input_type="datetime-local";
+                }
+                var input="<input type='"+input_type+"' class='input-data' value='"+value+"' class='form-control'>";
+                $(this).html(input);
+                $(this).removeClass("editable")
+            });
+
+            $(document).on("blur",".input-data",function(){
+                var value=$(this).val();
+                var td=$(this).parent("td");
+                $(this).remove();
+                td.html(value);
+                td.addClass("editable");
+                var type=td.data("type");
+                sendToServer(td.data("id"),value,type);
+            });
+            $(document).on("keypress",".input-data",function(e){
+                var key=e.which;
+                if(key==13){
+                    var value=$(this).val();
+                    var td=$(this).parent("td");
+                    $(this).remove();
+                    td.html(value);
+                    td.addClass("editable");
+                   var type=td.data("type");
+                   sendToServer(td.data("id"),value,type);
+                }
+            });
+
+            function sendToServer(id,value,type){
+                console.log(id);
+                console.log(value);
+                console.log(type);
+                $.ajax({
+                    url:"http://127.0.0.1:8000/app/empresa/save",
+                    type:"POST",
+                    data:{id:id,type:type,value:value},
+                })
+                .done(function(response){
+                    console.log(response);
+                })
+                .fail(function(){
+                   console.log("Error Occured");
+                });
+
+            }
+        });
+
+        // SCRIPT DE INSERT
+        $(".btn-insert-data").click(function(){
+            var select = document.getElementById("id_cod_projeto");
+            var cod_projeto = select.options[select.selectedIndex].text;
+            var opcaoValor = select.options[select.selectedIndex].value;
+            var empresa=$("#id_empresa").val();
+            var safegold_ger=$("#id_safegold_ger").val();
+            var cnpj=$("#id_cnpj").val();
+            var data_cadastro= new Date().toLocaleDateString(undefined, {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hour12: false, minute:'2-digit'});
+            var data_atualiza= new Date().toLocaleDateString(undefined, {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hour12: false, minute:'2-digit'});
+            console.log(data_cadastro, safegold_ger)
+            if(empresa==""){
+                $("#ins_error").text("Digite o nome da empresa")
+                $("#ins_error").show()
+                return;
+            }
+
+            else if(cnpj.length != 14){
+                $("#ins_error").text("CNPJ INVALIDO")
+                $("#ins_error").show()
+                return;
+            }
+            else{
+                $.ajax({
+                    url:"{% url 'crud_app:insert' %}",
+                    type:'POST',
+                    data:{cod_projeto:opcaoValor,empresa:empresa,safegold_ger:safegold_ger,cnpj:cnpj}
+                })
+                .done(function(response){
+                    if(response['error']==false){
+                        $("#ins_error").hide();
+                        $("#ins_success").text(response['errorMessage']);
+                        $("#ins_success").show();
+                        var html_data="<tr><td class='text-center col-md-1'>"+response['cod_empresa']+"</td><td class='editable' data-type='empresa'>"+empresa+"</td><td class='editable' data-type='empresa'>"+cod_projeto+"</td><td>"+data_cadastro+"</td><td>"+data_atualiza+"</td><td class='editable' data-type='cnpj'>"+cnpj+"</td><td class='ignore-on-print excludeExport text-center col-md-2'><a href='/app/empresa/detail/"+response['cod_empresa']+"/' class='mx-3' title='Detalhar Conta'><i class='fa-solid fa-up-right-and-down-left-from-center'></i></a><a href='/app/empresa/delete/"+response['cod_empresa']+"/' class='mx-3' title='Excluir Conta'><i class='fa-solid fa-trash-can'></i></a></td>";
+                        $(".table tbody").prepend(html_data);
+                                        
+                    }
+                    else{
+                        $("#ins_success").hide();
+                        $("#ins_error").text(response['errorMessage']);
+                        $("#ins_error").show();
+                    }
+                })
+                .fail(function(){
+                    $("#ins_success").hide();
+                    $("#ins_error").text("Something Went Wrong!");
+                    $("#ins_error").show();
+               })
+               .always(function(){
+                   $(".btn-insert-data").removeAttr("disabled");
+                   $(".btn-insert-data").text("INSERT EMPRESAS");
+               })
+           }
+       });
+       // SCRIPT DE DELETE
+       $(document).on("click",".btn-delete",function(){
+        var this_html=$(this);
+        this_html.attr("disabled","disabled");
+        this_html.text("DELETING....");
+        var cod_empresa=this_html.parent().parent().children().first().text();
+        //console.log(id);
+        $.ajax({
+            url:"#",
+            type:'POST',
+            data:{cod_empresa:cod_empresa}
+        })
+        .done(function(response){
+            if(response['error']==false){
+                this_html.parent().parent().remove();
+                $("#upt_error").hide();
+                $("#upt_success").text(response['errorMessage']);
+                $("#upt_success").show();
+
+            }
+            else{
+                $("#upt_success").hide();
+                $("#upt_error").text(response['errorMessage']);
+                $("#upt_error").show();
+            }
+        })
+        .fail(function(){
+             $("#upt_success").hide();
+             $("#upt_error").text("Something Went Wrong!");
+             $("#upt_error").show();
+        });
+});
+ 
+    // SCRIPT DE UPDATE ALL 
+$("#update_btn").click(function(){
+    $("#update_btn").hide();
+    $("#save_all_btn").show();
+
+$(".editable").each(function(){
+   var value=$(this).text();
+   var types=$(this).data('type');
+
+    var html_data="<input type='text' name='"+types+"'  class='form-control input_"+types+" input_data' value='"+value+"'>";
+    $(this).html(html_data);
+
+});
+});
+
+$("#save_all_btn").click(function(){
+$("#save_all_btn").attr("disabled","disabled");
+$("#save_all_btn").text("Saving Data....");
+
+var json_data=[];
+$(".input_data").each(function(){
+        var value=$(this).val();
+        var parent_html=$(this).parent();
+        parent_html.html(value);
+        $(this).remove();
+ });
+$("tbody tr").each(function(){
+     var cod_empresa=$(this).children().eq(0).text()
+     var empresa=$(this).children().eq(1).text()
+     var cnpj=$(this).children().eq(5).text()
+    console.log(cod_empresa)
+    console.log(empresa)
+    console.log(cnpj)
+     var single_data={"cod_empresa":cod_empresa,"empresa":empresa,"cnpj":cnpj};
+     json_data.push(single_data);
+});
+console.log(json_data)
+
+var string_data=JSON.stringify(json_data)
+$.ajax({
+        url:'{% url 'crud_app:update_all' %}',
+        type:'POST',
+        data:{data:string_data}
+    })
+    .done(function(response){
+        if(response['error']==false){
+            $("#upt_error").hide();
+            $("#upt_success").text(response['errorMessage']);
+            $("#upt_success").show();
+
+        }
+        else{
+            $("#upt_success").hide();
+            $("#upt_error").text(response['errorMessage']);
+            $("#upt_error").show();
+        }
+    })
+    .fail(function(){
+         $("#upt_success").hide();
+         $("#upt_error").text("Something Went Wrong!");
+         $("#upt_error").show();
+    })
+    .always(function(){
+         $("#save_all_btn").removeAttr("disabled");
+         $("#save_all_btn").text("SAVE ALL");
+         $("#update_btn").show();
+         $("#save_all_btn").hide();
+    })
+
+});
+
+
+
+    </script>
+{% endblock scripts %}
+
+
