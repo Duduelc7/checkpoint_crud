@@ -4,19 +4,51 @@ from django.views.generic import (TemplateView,ListView,CreateView,DeleteView,Up
 from . import models
 from .forms import EmpresaForm
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 import json
+from django.core.paginator import Paginator
+from django.db.models import Q
+import datetime
+import csv
+
+
 class IndexView(TemplateView):
      template_name = 'base.html'
 
 #############################     EMPRESA     #############################
+
+
+ITEMS_PAGINA = 25
+
 class EmpresaListView(ListView):
     template_name = 'crud_app/empresa/tabela.html'
     model = models.Empresas
+    paginate_by = ITEMS_PAGINA
+
+    def get_queryset(self):
+        queryset = super(EmpresaListView, self).get_queryset()
+
+        data = self.request.GET
+        search = data.get('empresa')
+
+        if search:
+            queryset = queryset.filter(
+                Q(cod_empresa__icontains=search)|
+                Q(cod_projeto__icontains=search)| 
+                Q(empresa__icontains=search)|
+                Q(data_cadastr__icontains=search)|
+                Q(data_atualiz__icontains=search)|
+                Q(safegold_ger__icontains=search)|
+                Q(cnpj__icontains=search)
+
+            )
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super(EmpresaListView, self).get_context_data(**kwargs)
         context['form'] = EmpresaForm()
         return context
+
 
 # def cadastro_empresa(request):
 #     if request.POST:
@@ -223,5 +255,23 @@ class EmpresaTeste(ListView):
     model = models.Projetos
 
 
+### CSV PDF
 
+
+def export_csv(request):
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition']= 'attachment; filename=Empresas'+str(datetime.datetime.now()) +'.csv'
+
+
+    write=csv.writer(response)
+    write.writerow(['COD_EMPRESA', 'COD_PROJETO', 'EMPRESA', 'DATA_CADASTRO', 'DATA_ATUALIZA', 'SAFEGOLD_GER', 'CNPJ'])
+
+    empresa = models.Empresas.objects.all()
+
+    for emp in empresa:
+        write.writerow([emp.cod_empresa,emp.cod_projeto, emp.empresa, emp.data_cadastro, emp.data_atualiza, emp.safegold_ger, emp.cnpj])
+
+
+    return response
 

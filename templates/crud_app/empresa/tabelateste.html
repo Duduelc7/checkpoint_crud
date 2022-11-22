@@ -1,36 +1,42 @@
-{% extends 'crud_app/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags%} 
 {% block title %}<title>Tabela</title>{% endblock title %}
-{% block content %}
+{% block styles %}<link rel="stylesheet" href="{% static 'css/styles.css' %}">{% endblock styles %}
+{% block headRight %}
+<div class="d-flex flex-row mx-4">
+    <h4 class="my-auto"><strong>Exportar dados:</strong></h4>      
+    <button type="button" class="btn btn-outline-dark sg-button" id="exportCSV">CSV</button>
+    <button type="button" class="btn btn-outline-dark sg-button" id="exportPDF">PDF</button>
+</div>  
+{% endblock headRight %}
+{% block main %}
 <main>
     <div id="print-info" class="text-center"></div>
     <div class="container-fluid" style="margin-bottom:150px;">
         <div class="row">
+            <!--======================================= ADICIONAR =======================================-->
             <div id ="insert_data" class="col sg-container mt-2 mx-3 ignore-on-print">
-                <h3 class="text-center">TABELA PARA TESTES</h3>
-                <form class="sg-content" id = "sg_form">
+                <h3 class="text-center">Adicionar</h3>
+                <form class="sg-content" id="sg_form">
                     {% csrf_token %} 
                     
-
-
-                
+                    {{ form|crispy }}
+                     
                     <div class="col text-center mb-1 mt-1">
                         <input type="button" name="submit" class="btn btn-warning btn-block btn-info btn-insert-data" value="Adicionar" id='btn'>
                     </div>
                     <div class="form-group">
                         <div class="alert alert-success" id="ins_success" style="display:none">
-          
+                            Empresa cadastrada com sucesso!
                         </div>
                          <div class="alert alert-danger" id="ins_error" style="display:none">
-                            
-          
+                            Ocorreu um erro!
                         </div>
                     </div>
                 </form>
             </div>
-                    <!--======================================= FILTRAR =======================================-->
-
+            <!--======================================= FILTRAR =======================================-->
             <div class="col sg-container mt-2 mx-3 ignore-on-print">
                 <h3 class="text-center">Filtrar</h3>
                 <div class="sg-content">
@@ -43,20 +49,20 @@
                     </div>
                     <div class="form-group form-group-sm my-3 ml-3 mr-3">
                         <label for="empresaFilter">Empresa</label>
-                        <input type="text" name="conta" id="empresaFilter" class="form-control" aria-label="Large" placeholder="Filtrar por empresa" onkeyup="filtrarPorEmpresa()" />
+                        <input type="text" name="empresa" id="empresaFilter" class="form-control" aria-label="Large" placeholder="Filtrar por empresa" onkeyup="filtrarPorEmpresa()" />
                     </div>
                     <div class="form-group form-group-sm my-3 ml-3 mr-3">
                         <label for="projetoFilter">Projeto</label>
-                        <input type="text" name="fornecedor" id="projetoFilter"  class="form-control" aria-label="Large" placeholder="Filtrar por projeto" onkeyup="filtrarPorProjeto()" />
+                        <input type="text" name="projeto" id="projetoFilter"  class="form-control" aria-label="Large" placeholder="Filtrar por projeto" onkeyup="filtrarPorProjeto()" />
                     </div>
                     <div class="form-group form-group-sm my-3 ml-3 mr-3">
                         <label for="cnpjFilter">CNPJ</label>
-                        <input type="text" name="fornecedor" id="cnpjFilter" class="form-control" aria-label="Large" placeholder="Filtrar por CNPJ" onkeyup="filtrarPorCNPJ()" />
+                        <input type="text" name="cnpj" id="cnpjFilter" class="form-control" aria-label="Large" placeholder="Filtrar por CNPJ" onkeyup="filtrarPorCNPJ()" />
                     </div>
                     <!--======================================= APAGAR DEPOIS, SOMENTE PARA TESTES =======================================-->
                     <div class="col text-center mb-1 mt-1">
                         <hr>
-                        <button class="btn btn-block btn-success mb-2" id="update_btn">Editar</button>
+                        <button class="btn btn-block btn-success mb-2" id="update_btn">Editar tudo</button>
                         <button class="btn btn-block btn-success mb-2" id="save_all_btn" style="display:none;margin-top:0px">Salvar</button>
                     </div>
                 </div>
@@ -69,13 +75,13 @@
                 <table class="table table-Light table-bordered table-striped mb-3 mt-2 table-responsive table-hover" id="sg-table">
                     <thead class="table-dark">
                         <tr>
-                            <th class="col text-center">ID</th>
+                            <th class="col-1 text-center">ID</th>
                             <th class="col">Empresa</th>
-                            <th class="col">Projeto</th>
+                            <th class="col-2">Projeto</th>
                             <th class="col">Data Cadastro</th>
                             <th class="col">Data Atualizado</th>
                             <th class="col">CNPJ</th>
-                            <th class="col text-center ignore-on-print excludeExport">Action</th>
+                            <th class="col-1 text-center ignore-on-print">Action</th>
                         </tr>
                     </thead>
                     <tbody >
@@ -83,34 +89,25 @@
                         <tr>
                             <td class="text-center col-md-1">{{empresas.cod_empresa}}</td>
                             <td class="editable" data-id="{{empresas.cod_empresa}}" data-type="empresa">{{empresas.empresa}}</td>
-                            <td class="editable" data-id="{{empresas.cod_empresa}}" data-type="cod_projeto">{{empresas.cod_projeto}}</td>
+                            <td class="editable" data-id="{{empresas.cod_empresa}}" data-type="empresa">{{empresas.cod_projeto}}</td>
                             <td class="editable" data-id="{{empresas.cod_empresa}}" data-type="data_cadastro">{{empresas.data_cadastro|date:"d/m/Y H:i" }}</td>
-                            <td class="editable" data-id="{{empresas.cod_empresa}}" data-type="data_atualiza">{{empresas.data_atualiza|date:"d/m/Y H:i" }}</td>
+                            <td class="editable" data-id="{{empresas.cod_empresa}}" data-type="data_cadastro">{{empresas.data_atualiza|date:"d/m/Y H:i" }}</td>
                             <td class="editable" data-id="{{empresas.cod_empresa}}" data-type="cnpj">{{empresas.cnpj}}</td>
-                            <td class="ignore-on-print excludeExport text-center col-md-2">
+                            <td class="ignore-on-print text-center">
                                 <a href="{% url 'crud_app:empresa-detail' pk=empresas.pk %}" class="mx-3" title="Detalhar Conta"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></a>
-                                {% comment %} <button class="btn btn-block btn-delete btn-danger">DELETE</button>                                 {% endcomment %}
                                 <a href="{% url 'crud_app:empresa-delete' pk=empresas.pk %}" class="mx-3" title="Excluir Conta"><i class="fa-solid fa-trash-can"></i></a>
-                            </td>
-                            
-                            
+                            </td> 
                         </tr>
                         
                         {% endfor %}
                     </tbody>
                 </table>
+                {% include "crud_app/pagination.html" %}
             </div>
         </div>
     </div>
 </main>
-<footer class="footer fixed-bottom ignore-on-print">
-    <div class="sg-footer-container">
-        <p>Exportar dados:</p>
-        <button type="button" class="btn btn-outline-dark sg-button" id="exportCSV">CSV</button>
-        <button type="button" class="btn btn-outline-dark sg-button" id="exportPDF">PDF</button>
-    </div>
-</footer>
-{% endblock %}
+{% endblock main %}
 {% block scripts %}
     <script src="{% static 'js/ExportPDF.js' %}"></script>
     <script src="{% static 'js/ExportCSV.js' %}"></script>
@@ -331,7 +328,49 @@ $.ajax({
 
 
 
+// FILTROS  
+
+
+$(function(){
+    $("#sg-table input").keyup(function(){        
+        var index = $(this).parent().index();   // recebe o input da coluna
+        var nth = "#sg-table td:nth-child("+(index+1).toString()+")"; // 
+        var valor = $(this).val().toUpperCase(); // case insensitive
+        $("#sg-table tbody tr").show();
+        $(nth).each(function(){
+            if($(this).text().toUpperCase().indexOf(valor) < 0){
+                $(this).parent().hide();
+            }
+        });
+    });
+ 
+    $("#sg-table input").blur(function(){
+        $(this).val("");
+    }); 
+});
+
+
+
     </script>
 {% endblock scripts %}
+
+
+    $(function(){
+        $("#sg-table input").keyup(function(){        
+            var index = $(this).parent().index();   // recebe o input da coluna
+            var nth = "#sg-table td:nth-child("+(index+1).toString()+")"; // 
+            var valor = $(this).val().toUpperCase(); // case insensitive
+            $("#sg-table tbody tr").show();
+            $(nth).each(function(){
+                if($(this).text().toUpperCase().indexOf(valor) < 0){
+                    $(this).parent().hide();
+                }
+            });
+        });
+ 
+        $("#sg-table input").blur(function(){
+            $(this).val("");
+        }); 
+    });
 
 

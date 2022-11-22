@@ -91,6 +91,7 @@ class Empresas(models.Model):
         managed = False
         db_table = 'empresas'
         verbose_name_plural = 'Empresas'
+        ordering = ['-cod_empresa']
 
     def __str__(self):
         return "{}".format(self.empresa)

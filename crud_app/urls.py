@@ -16,6 +16,7 @@ urlpatterns = [
     path('empresa/save',views.saveempresa,name='saveempresa'),
     path('empresa/add',views.insertempresa,name='insert'),
     path('empresa/update',views.update_all, name= 'update_all'),
+    # path('empresa/pag',views.paginacao, name= 'paginacao'),
     # path('empresa/delete',views.delete_empresa,name='delete'),
     
 
@@ -23,11 +24,11 @@ urlpatterns = [
 
 
     ###############################     PROJETO     ###############################
-    # path('projeto/',views.ProjetoListView.as_view(),name='list'),
-    # path('projeto/create/',views.ProjetoCreateView.as_view(),name='create'),
-    # path('projeto/update/<int:pk>/',views.EmpresaUpdateView.as_view(),name='update'),
-    # path('projeto/delete/<int:pk>/',views.ProjetoDeleteView.as_view(),name='delete'),
-    # path('projeto/detail/<int:pk>/',views.ProjetoDetailView.as_view(),name='detail'),
+    path('projeto/',views.ProjetoListView.as_view(),name='projeto-list'),
+    path('projeto/create/',views.ProjetoCreateView.as_view(),name='create'),
+    path('projeto/update/<int:pk>/',views.EmpresaUpdateView.as_view(),name='update'),
+    path('projeto/delete/<int:pk>/',views.ProjetoDeleteView.as_view(),name='delete'),
+    path('projeto/detail/<int:pk>/',views.ProjetoDetailView.as_view(),name='detail'),
     
     ###############################    DIMCONTAS    ###############################
     path('conta/',views.DimContasListView.as_view(),name='conta-list'),
@@ -50,6 +51,14 @@ urlpatterns = [
 
     path('tabelateste/',views.EmpresaTeste.as_view(),name='empresa-teste'),
     # path('teste/',views.ativos,name='ativos-teste'),
+
+
+
+        ############################### CSV AND PDF ###############################
+    path('projeto/csv',views.export_csv,name='export-csv'),
+    # path('projeto/pdf',views.export_pdf,name='export-pdf'),
+
+
 
 ]
 
