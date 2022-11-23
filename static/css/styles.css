@@ -5,22 +5,18 @@
     --sg-white: #E6E7E9;
     --black: #000;
     --white: #fff;
-    --light-gray: #D1C8B5;
     --table-light-gray: #ececec;
     --background: #dddddd;
     --dark-gray: #5e5e5e;
     --erase: #ff0000;
     --erase-hover: #942121;
-    --edit-hover: #0000bd;
-    --expand: #ca8f0f;
-    --expand-hover: #855d08;
     --shadow-container: #1f26875e;
     --border-container: #2222225e;
 }
 
 /* ====================================    TAGS ORIGINAIS DO HTML    ==================================== */
 body{
-    margin-bottom: 5em;
+    margin-bottom: 3em;
 }
 
 main{
@@ -33,9 +29,6 @@ main{
     box-shadow: 0 8px 32px 0 var(--shadow-container);
     border-radius: 10px;
     border: 1px solid var(--border-container);
-    /*margin-left: 3%;
-    margin-right: 3%;
-    margin-bottom: 5%;*/
 }
 
 .sg-content {
@@ -48,25 +41,11 @@ main{
     color: var(--white);
 }
 
-.sg-footer-container {
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    background-color: var(--sg-yellow);
-    padding: 0px 20px 0px 32px;
-}
-
-.sg-footer-container p {
-    margin: 0;
-    font-weight: 700;
-    font-size: 25px;
-}
-
 .sg-button {
-    background-color: var(--light-gray);
-    font-weight: 600;
+    background-color: var(--sg-yellow);
     color: var(--black);
     border: 1px solid var(--dark-gray);
+    font-weight: 600;
     margin: 10px;
     padding: 5px 25px;
 }
@@ -75,10 +54,14 @@ main{
     visibility: hidden;
     display: none;
 }
-/* ====================================             ID               ==================================== */
-#export:hover{
-    background-color: var(--sg-white);
+.modal-backdrop {
+    z-index: 1040 !important;
 }
+.modal-content {
+    margin: 2px auto;
+    z-index: 1100 !important;
+}
+/* ====================================             ID               ==================================== */
 
 /* ====================================         FONTAWESOME          ==================================== */
 .fa-expand{
@@ -141,9 +124,10 @@ main{
         align-items: right;
     }
 }
-@media(max-width: 740){
-    .sg-container{
-        margin: 0;
+@media(max-width: 1500){
+    main{
+        margin-left: 0;
+        margin-right: 0;
     }
 }
 
@@ -198,66 +182,4 @@ main{
         padding-left: 0%;
         padding-right: 0%;
     }
-}
-
-/* ====================================           NAVBAR             ==================================== */
-.sg-projeto:hover{
-    background-color: var(--sg-yellow);
-    color: var(--sg-gray);
-    font-size: 1em;
-}
-
-.navbar .megamenu{ padding: 1rem; }
-
-.navbar .dropdown-toggle:hover { 
-    background-color: var(--dark-gray);
-    border-radius: 5%;
-}
-.vertical-line{
-    border-left: solid 1px var(--border-container);
-}
-
-.dropdown-menu{
-    border-top-left-radius: 0%;
-    border-top-right-radius: 0%;
-    border-bottom: 1px solid var(--border-container);
-}
-.dropdown-menu a{
-    font-weight: 500 ;
-}
-
-.dropdown-hover:hover>.dropdown-menu {
-    display: inline-block;
-}
-    
-.dropdown-hover>.dropdown-toggle:active {
-/*Without this, clicking will make it sticky*/
-pointer-events: none;
-}
-/* === desktop view === */
-@media all and (min-width: 992px) {
-
-  .navbar .has-megamenu{position:static!important;}
-  .navbar .megamenu{left:0; right:0; width:100%; margin-top:0;  }
-
-}
-/* === mobile view === */
-@media(max-width: 991px){
-  .navbar.fixed-top .navbar-collapse, .navbar.sticky-top .navbar-collapse{
-    overflow-y: auto;
-      max-height: 90vh;
-      margin-top:10px;
-  }
-
-  .sg-button{
-    align-items: center;
-  }
-  .col{
-    margin: 0px;
-  }
-  .navbar .admin-button{
-    text-align: center;
-    display: flex; 
-    justify-content: center;
- }
 }

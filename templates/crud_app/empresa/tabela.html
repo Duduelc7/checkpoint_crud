@@ -5,7 +5,7 @@
 {% block headRight %}
 <div class="d-flex flex-row mx-4">
     <h4 class="my-auto"><strong>Exportar dados:</strong></h4>      
-    <button type="button" class="btn btn-outline-dark sg-button"  id="exportCSV"><a href={% url 'crud_app:export-csv' %}>CSV</a></button>
+    <a type="button" class="btn btn-outline-dark sg-button"  id="exportCSV" href={% url 'crud_app:export-csv' %}>CSV</a>
     <button type="button" class="btn btn-outline-dark sg-button" id="exportPDF">PDF</button>
 </div>  
 {% endblock headRight %}
@@ -372,22 +372,5 @@ $(function(){
 {% endblock scripts %}
 
 
-    $(function(){
-        $("#sg-table input").keyup(function(){        
-            var index = $(this).parent().index();   // recebe o input da coluna
-            var nth = "#sg-table td:nth-child("+(index+1).toString()+")"; // 
-            var valor = $(this).val().toUpperCase(); // case insensitive
-            $("#sg-table tbody tr").show();
-            $(nth).each(function(){
-                if($(this).text().toUpperCase().indexOf(valor) < 0){
-                    $(this).parent().hide();
-                }
-            });
-        });
- 
-        $("#sg-table input").blur(function(){
-            $(this).val("");
-        }); 
-    });
 
 

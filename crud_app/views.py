@@ -18,7 +18,7 @@ class IndexView(TemplateView):
 #############################     EMPRESA     #############################
 
 
-ITEMS_PAGINA = 25
+ITEMS_PAGINA = 50
 
 class EmpresaListView(ListView):
     template_name = 'crud_app/empresa/tabela.html'
