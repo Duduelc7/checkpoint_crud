@@ -6,7 +6,7 @@ app_name = 'crud_app'
 urlpatterns = [
 
     ###############################     EMPRESA     ###############################
-    path('empresa/',views.EmpresaListView.as_view(),name='empresa-list'),
+    #path('empresa/',views.EmpresaListView.as_view(),name='empresa-list'),
     #path('empresa/',views.empresalistview,name='empresa-list'),
     path('empresa/create/',views.EmpresaCreateView.as_view(),name='empresa-create'),
     path('empresa/update/<int:pk>/',views.EmpresaUpdateView.as_view(),name='empresa-update'),
@@ -18,6 +18,8 @@ urlpatterns = [
     path('empresa/update',views.update_all, name= 'update_all'),
     # path('empresa/pag',views.paginacao, name= 'paginacao'),
     # path('empresa/delete',views.delete_empresa,name='delete'),
+   #path('empresa/ativos', views.projetos_ativos, name='ativos'),
+    
     
 
 
@@ -49,8 +51,7 @@ urlpatterns = [
 
     ############# TESTE
 
-    path('tabelateste/',views.EmpresaTeste.as_view(),name='empresa-teste'),
-    # path('teste/',views.ativos,name='ativos-teste'),
+    path('empresa/',views.ativos,name='empresa-list'),
 
 
 

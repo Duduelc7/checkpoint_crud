@@ -80,7 +80,7 @@ CHOICES_BOOL = (
 
 class Empresas(models.Model):
     cod_empresa = models.BigAutoField(primary_key=True)
-    cod_projeto = models.ForeignKey('Projetos', models.DO_NOTHING, db_column='cod_projeto', blank=True, null=True)
+    cod_projeto = models.ForeignKey('Projetos', models.DO_NOTHING, db_column='cod_projeto', blank=True, null=True, verbose_name='Projeto')
     empresa = models.CharField(max_length=255, blank=True, null=True)
     data_cadastro = models.DateTimeField(auto_now_add=True)
     data_atualiza = models.DateTimeField(auto_now=True)

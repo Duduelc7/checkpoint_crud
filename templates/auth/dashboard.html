@@ -4,7 +4,7 @@
 {% block main %}
     <h1 class="text-center"> Seja Bem vindo, {{user.username}}</h1>
     <hr>
-        <h1 class="text-center">Esses são seus projetos</h1>
+        <h1 class="text-center">Esses são seus projetos ativos</h1>
 <section class="best-receipe-area">
     <div class="container">
         <div class="row">
@@ -15,9 +15,8 @@
                         <div class="card mb-3 shadow p-3 bg-white rounded" style="width: 19rem;">
                             <img class="card-img-top" src="https://safegold.com.br/wp-content/themes/safeGold/assets/img/thumb-whats.png" alt="Card image cap">
                             <div class="card-body text-center">
-                                <a href="{% url 'crud_app:empresa-list' %}" class="text-decoration-none text-dark">
+                                <a href="{% url 'crud_app:empresa-list' %}" class="text-decoration-none text-dark" id="{{obj_active.cod_projeto}}">
                                     <h5>{{obj_active}}</h5>
-                                    <h5>PROJETO ATIVO</h5>
                                 </a>
                                 <hr>
                                 <a href="{% url 'crud_app:empresa-list' %}" class="btn btn-primary">Ver Projeto</a>
@@ -26,64 +25,40 @@
                     </div>
                 </div>
             </div>
-            
-            {% endfor %}
-            {% for obj in projetos %}
-            <!-- Single Best Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4 d-flex justify-content-center">
-                <div class="single-best-receipe-area mb-30">
-                    <div class="receipe-content">
-                        <div class="card mb-3 shadow p-3 bg-white rounded" style="width: 19rem;">
-                            <img class="card-img-top" src="https://safegold.com.br/wp-content/themes/safeGold/assets/img/thumb-whats.png" alt="Card image cap">
-                            <div class="card-body text-center">
-                                <a href="{% url 'crud_app:empresa-list' %}" class="text-decoration-none text-dark">
-                                    <h5>{{obj}}</h5>
-                                </a>
-                                <hr>
-                                <a href="{% url 'crud_app:empresa-list' %}" class="btn btn-primary">Ver Projeto</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+         
             {% endfor %}
         </div>
     </div>
 </section>
+<hr>
+    <h1 class="text-center">Todos os seus projetos</h1>
+    <section class="best-receipe-area">
+        <div class="container">
+            <div class="row">
+                {% for obj in projetos %}
+                <div class="col-12 col-sm-6 col-lg-4 d-flex justify-content-center">
+                    <div class="single-best-receipe-area mb-30">
+                        <div class="receipe-content">
+                            <div class="card mb-3 shadow p-3 bg-white rounded" style="width: 19rem;">
+                                <img class="card-img-top" src="https://safegold.com.br/wp-content/themes/safeGold/assets/img/thumb-whats.png" alt="Card image cap">
+                                <div class="card-body text-center">
+                                    <a href="{% url 'crud_app:empresa-list' %}" class="text-decoration-none text-dark">
+                                        <h5>{{obj}}</h5>
+                                    </a>
+                                    <hr>
+                                    <a href="{% url 'crud_app:empresa-list' %}" class="btn btn-primary">Ver Projeto</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+
 {% endblock main %}
 
 
-
-{% comment %} {% block styles %}
-<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
-{% endblock styles %}
-
-
-{% block body %}
-<body  id="body-pd">
-    <div>
-        <header class="header" id="header">
-            <div class="header_toggle"> <i class='fa-solid fa-bars' id="header-toggle"></i> </div>
-        </header>
-        <div class="l-navbar" id="nav-bar">
-            <nav class="nav">
-            <div> <a href="#" class="nav_logo"></i> <img src="{% static "img/Safegold.svg" %}" width="200" alt="Safegold" class="mx-1" id="safegold"></a>
-                    <div class="nav_list"> 
-                        <a href="#" class="nav_link active"><i class="fa-solid fa-table-columns"></i><span class="nav_name">Dashboard</span></a> 
-                        <a href="#" class="nav_link"><i class="fa-solid fa-handshake"></i><span class="nav_name">Projeto</span></a> 
-                        <a href="#" class="nav_link"><i class="fa-solid fa-lock"></i><span class="nav_name">Admin</span></a>
-                    </div>
-                </div><a href="{% url 'logout' %}" class="nav_link"><i class="fa-solid fa-right-from-bracket text-danger"></i><span class="nav_name text-white">Sair</span> </a>
-            </nav>
-        </div>
-
-<ul>
-    <h1> Seja Bem vindo, {{user.username}}</h1>
-        <h1>Esses são seus projetos</h1>
-</ul>
-</body>
-{% endblock body %}
-{% block scripts %}
-<script src="{% static 'js/sidebar.js' %}"></script>
-{% endblock scripts %}
-{% endcomment %}

@@ -27,7 +27,7 @@
             <div class="l-navbar" id="nav-bar">
                 <nav class="nav">
                     <div> 
-                        <a href="{% url 'index' %}" class="nav_logo"></i> <img src="{% static "img/Safegold.svg" %}" width="200" alt="Safegold" class="mx-1" id="safegold"></a>
+                        <a href="{% url 'dashboard' %}" class="nav_logo"></i> <img src="{% static "img/Safegold.svg" %}" width="200" alt="Safegold" class="mx-1" id="safegold"></a>
                         <div class="nav_list"> 
                             <a href="{% url 'dashboard' %}" class="nav_link" id="dashboard">
                                 <i class="fa-solid fa-table-columns"></i>
@@ -37,7 +37,7 @@
                                 <i class="fa-solid fa-list"></i>
                                 <span class="nav_name">Conta-Fornecedor</span>
                             </a> 
-                            <a href="{% url 'crud_app:projeto-list' %}" class="nav_link " id="projetos">
+                            <a href="#" class="nav_link " id="projetos">
                                 <i class="fa-solid fa-handshake"></i>
                                 <span class="nav_name">Projetos</span>
                             </a>
@@ -49,10 +49,12 @@
                                 <i class="fa-solid fa-file-invoice"></i>
                                 <span class="nav_name">Contas</span>
                             </a>
+                            {% if user.is_superuser %}
                             <a href="{% url 'admin:index' %}" class="nav_link " id="admin">
                                 <i class="fa-solid fa-lock"></i>
                                 <span class="nav_name">Admin</span>
                             </a>
+                            {% endif %}
                         </div>
                     </div>
                     <a href="{% url 'logout' %}" class="nav_link logout"><i class="fa-solid fa-right-from-bracket"></i><span class="nav_name text-white">Sair</span> </a>

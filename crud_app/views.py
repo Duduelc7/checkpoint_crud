@@ -15,39 +15,75 @@ import csv
 class IndexView(TemplateView):
      template_name = 'base.html'
 
+
+
 #############################     EMPRESA     #############################
 
+def ativos(request):
+    if request.user.is_authenticated:
+        id = request.user.id
+        user_table = models.Projetos.objects.filter(id_user = id)
+        projetos_ativos_select = user_table.filter(ativo='1').values()
+        projetos_ativos = user_table.filter(ativo='1').values('cod_projeto')
+        empresa = models.Empresas.objects.filter(cod_projeto__in=projetos_ativos)
 
-ITEMS_PAGINA = 50
+        
 
-class EmpresaListView(ListView):
-    template_name = 'crud_app/empresa/tabela.html'
-    model = models.Empresas
-    paginate_by = ITEMS_PAGINA
+        
+        print(projetos_ativos_select)
+        dados = {
+            'projetos_ativos': projetos_ativos_select,
+            'empresa': empresa
+        }
+        print('dashboard OK')
+        return render(request,'crud_app/empresa/tabela.html', dados)
+# ITEMS_PAGINA = 50
 
-    def get_queryset(self):
-        queryset = super(EmpresaListView, self).get_queryset()
+# class EmpresaListView(ListView):
+#     template_name = 'crud_app/empresa/tabela.html'
+#     model = models.Empresas
+#     paginate_by = ITEMS_PAGINA
 
-        data = self.request.GET
-        search = data.get('empresa')
+#     def get_queryset(self):
+#         queryset = super(EmpresaListView, self).get_queryset()
 
-        if search:
-            queryset = queryset.filter(
-                Q(cod_empresa__icontains=search)|
-                Q(cod_projeto__icontains=search)| 
-                Q(empresa__icontains=search)|
-                Q(data_cadastr__icontains=search)|
-                Q(data_atualiz__icontains=search)|
-                Q(safegold_ger__icontains=search)|
-                Q(cnpj__icontains=search)
+#         data = self.request.GET
+#         search = data.get('empresa')
+        
 
-            )
-        return queryset
+#         if search:
+#             queryset = queryset.filter(
+#                 Q(cod_empresa__icontains=search)|
+#                 Q(cod_projeto__icontains=search)| 
+#                 Q(empresa__icontains=search)|
+#                 Q(data_cadastr__icontains=search)|
+#                 Q(data_atualiz__icontains=search)|
+#                 Q(safegold_ger__icontains=search)|
+#                 Q(cnpj__icontains=search)
 
-    def get_context_data(self, **kwargs):
-        context = super(EmpresaListView, self).get_context_data(**kwargs)
-        context['form'] = EmpresaForm()
-        return context
+#             )
+#         return queryset
+
+#     def get_context_data(self, **kwargs):
+#         context = super(EmpresaListView, self).get_context_data(**kwargs)
+#         context['form'] = EmpresaForm()
+#         return context
+    
+#     def projetos_ativos(self):
+
+#         if self.request.user.is_authenticated:
+#             id = self.request.user.id
+#             print(id)
+#             projetos = models.Projetos.objects.filter(id_user=id)
+#             ativos = models.Projetos.objects.filter(id_user = id)
+#             projetos_active = ativos.filter(ativo='1')
+#             print(projetos_active)
+#             context = {
+#                 'projetos': projetos,
+#                 'projetos_active': projetos_active
+#             }
+#             print('dashboard OK')
+#             return context
 
 
 # def cadastro_empresa(request):
@@ -103,7 +139,6 @@ def insertempresa(request):
         empresa_data['detail'] = "<a href='/app/empresa/detail/"+str(empresa.pk)+"/' class='mx-3' title='Detalhar Conta'><i class='fa-solid fa-up-right-and-down-left-from-center'></i></a>"
         empresa_data['delete'] = "<a href='/app/empresa/delete/"+str(empresa.pk)+"/' class='mx-3' title='Excluir Conta'><i class='fa-solid fa-trash-can'></i></a>"
      
-        # path('empresa/detail/<int:pk>/',views.EmpresaDetailView.as_view(),name='empresa-detail'),
 
         return JsonResponse(empresa_data,safe=False)
     except:
@@ -139,6 +174,13 @@ def update_all(request):
 #     except:
 #         empresa_data={"error":True,"errorMessage":"Failed to Delete Data"}
 #         return JsonResponse(empresa_data,safe=False)
+
+
+
+    
+
+
+
 
     
 class EmpresaCreateView(CreateView):
@@ -250,9 +292,6 @@ class MatrizFornecedorDetailView(DetailView):
 # testes
 
 
-class EmpresaTeste(ListView):
-    template_name = 'crud_app/empresa/tabelateste.html'
-    model = models.Projetos
 
 
 ### CSV PDF
@@ -274,4 +313,13 @@ def export_csv(request):
 
 
     return response
+
+
+
+
+
+######### LIST VIEW with DEF
+
+
+
 
