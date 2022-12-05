@@ -23,16 +23,23 @@ def ativos(request):
     if request.user.is_authenticated:
         id = request.user.id
         user_table = models.Projetos.objects.filter(id_user = id)
-        projetos_ativos_select = user_table.filter(ativo='1').values()
-        projetos_ativos = user_table.filter(ativo='1').values('cod_projeto')
+        user = user_table.all().values('cod_projeto')
+
+        projetos_ativos_select = user_table.filter(ativo='1').values()  # ---> filtro pro select
+
+        projetos_ativos = user_table.values('cod_projeto') # ---> tabela com todos
         empresa = models.Empresas.objects.filter(cod_projeto__in=projetos_ativos)
+        empresa_all = models.Empresas.objects.filter(cod_projeto__in=user)
+        #        projetos_ativos = user_table.filter(ativo='1').values('cod_projeto') # ---> tabela só com ativos
+
+
 
         
-
         
-        print(projetos_ativos_select)
+        print(user)
         dados = {
             'projetos_ativos': projetos_ativos_select,
+            'user': empresa_all,
             'empresa': empresa
         }
         print('dashboard OK')
