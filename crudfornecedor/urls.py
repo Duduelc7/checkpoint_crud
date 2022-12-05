@@ -16,10 +16,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from crud_app import views
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register('Empresas', views.EmpresaserializerViewSet, basename= 'Empresas')
+router.register('MatrizContaFornecedor', views.MatrizContaFornecedorViewSet, basename= 'MatrizContaFornecedor')
+router.register('Projetos', views.ProjetosViewSet, basename= 'Projetos')
+router.register('Dimcontas', views.DimcontasViewSet, basename= 'Dimcontas')
+
+
+
 
 urlpatterns = [
     path('index/',views.IndexView.as_view(),name='index'),
     path('admin/',admin.site.urls,name='admin'),
     path('app/',include('crud_app.urls',namespace='crud_app')),
-    path('', include('usuarios.urls'))
+    path('', include('usuarios.urls')),
+    path('api/',include(router.urls))
 ]

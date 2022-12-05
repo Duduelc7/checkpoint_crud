@@ -325,7 +325,28 @@ def export_csv(request):
 
 
 
-######### LIST VIEW with DEF
+######### LIST VIEW with API
+from . import serializers
+
+from rest_framework import viewsets
+
+class EmpresaserializerViewSet(viewsets.ModelViewSet):
+    queryset = models.Empresas.objects.all()
+    serializer_class = serializers.EmpresasSerializer
+
+class MatrizContaFornecedorViewSet(viewsets.ModelViewSet):
+    queryset = models.MatrizContaFornecedor.objects.all()
+    serializer_class = serializers.MatrizContaFornecedorSerializer
+
+class ProjetosViewSet(viewsets.ModelViewSet):
+    queryset = models.Projetos.objects.all()
+    serializer_class = serializers.ProjetosSerializer
+
+class DimcontasViewSet(viewsets.ModelViewSet):
+    queryset = models.Dimcontas.objects.all()
+    serializer_class = serializers.DimcontasSerializer
+
+
 
 
 
