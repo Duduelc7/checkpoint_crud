@@ -5,33 +5,40 @@
     <h1 class="text-center"> Seja Bem vindo, {{user.username}}</h1>
     <hr>
         <h1 class="text-center">Esses são seus projetos ativos</h1>
-<section class="best-receipe-area">
-    <div class="container">
-        <div class="row">
-            {% for obj_active in projetos_ativos %}
-            <div class="col-12 col-sm-6 col-lg-4 d-flex justify-content-center">
-                <div class="single-best-receipe-area mb-30">
-                    <div class="receipe-content">
-                        <div class="card mb-3 shadow p-3 bg-white rounded" style="width: 19rem;">
-                            <img class="card-img-top" src="https://safegold.com.br/wp-content/themes/safeGold/assets/img/thumb-whats.png" alt="Card image cap">
-                            <div class="card-body text-center">
-                                <a href="{% url 'crud_app:empresa-list' %}" class="text-decoration-none text-dark" id="{{obj_active.cod_projeto}}">
-                                    <h5>{{obj_active}}</h5>
-                                </a>
-                                <hr>
-                                <a href="{% url 'crud_app:empresa-list' %}" class="btn btn-primary">Ver Projeto</a>
+<form action="{% url 'crud_app:empresa-list' %}" method="post" id="projetoform">
+    {% csrf_token %}
+    <section class="best-receipe-area">
+        <div class="container">
+            <div class="row">
+                {% for obj_active in projetos_ativos %}
+                <div class="col-12 col-sm-6 col-lg-4 d-flex justify-content-center">
+                    <div class="single-best-receipe-area mb-30">
+                        <div class="receipe-content">
+                            <div class="card mb-3 shadow p-3 bg-white rounded" style="width: 19rem;">
+                                <img class="card-img-top" src="https://safegold.com.br/wp-content/themes/safeGold/assets/img/thumb-whats.png" alt="Card image cap">
+                                <div class="card-body text-center">
+                                    <a href="{% url 'crud_app:empresa-list' %}" class="text-decoration-none text-dark" id="{{obj_active.cod_projeto}}" form="projetoform" name="projeto" value="{{obj_active}}" type='submit'>
+                                        <h5>{{obj_active.projeto}}</h5>
+                                    </a>
+                                    <hr>
+                                    <button type="submit" form="projetoform" name="projeto" value="{{obj_active.cod_projeto}}" class="btn btn-primary btn-lg btn-black">Ver projeto</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            
+                {% endfor %}
             </div>
-         
-            {% endfor %}
         </div>
-    </div>
-</section>
+    </section>
+</form>
+
+
 <hr>
     <h1 class="text-center">Todos os seus projetos</h1>
+<form action="{% url 'crud_app:empresa-list' %}" method="post" id="projetoformD">
+    {% csrf_token %}
     <section class="best-receipe-area">
         <div class="container">
             <div class="row">
@@ -42,11 +49,11 @@
                             <div class="card mb-3 shadow p-3 bg-white rounded" style="width: 19rem;">
                                 <img class="card-img-top" src="https://safegold.com.br/wp-content/themes/safeGold/assets/img/thumb-whats.png" alt="Card image cap">
                                 <div class="card-body text-center">
-                                    <a href="{% url 'crud_app:empresa-list' %}" class="text-decoration-none text-dark">
-                                        <h5>{{obj}}</h5>
+                                    <a href="{% url 'crud_app:empresa-list' %}" class="text-decoration-none text-dark" id="{{obj.cod_projeto}}" form="projetoform" name="projeto" value="{{obj}}" type='submit'>
+                                        <h5>{{obj.projeto}}</h5>
                                     </a>
                                     <hr>
-                                    <a href="{% url 'crud_app:empresa-list' %}" class="btn btn-primary">Ver Projeto</a>
+                                    <button type="submit" form="projetoform" name="projeto" value="{{obj.cod_projeto}}" class="btn btn-primary btn-lg btn-black">Ver projeto</button>
                                 </div>
                             </div>
                         </div>
@@ -57,7 +64,7 @@
             </div>
         </div>
     </section>
-
+</form>
 
 {% endblock main %}
 

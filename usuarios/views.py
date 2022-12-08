@@ -71,10 +71,10 @@ def logout(request):
 def dashboard(request):
     if request.user.is_authenticated:
         id = request.user.id
-        projetos = Projetos.objects.filter(id_user=id)
+        projetos = Projetos.objects.filter(id_user=id).values()
         ativos = Projetos.objects.filter(id_user = id)
-        projetos_ativos = ativos.filter(ativo='1')
-        print(projetos_ativos)
+        projetos_ativos = ativos.filter(ativo='1').values()
+        print(projetos)
         dados = {
             'projetos': projetos,
             'projetos_ativos': projetos_ativos

@@ -22,11 +22,10 @@
                     
                 
                     <div id="div_id_cod_projeto" class="mb-3"> <label for="id_cod_projeto" class="form-label">Projeto</label> 
-                        <select name="cod_projeto" class="select form-select" id="id_cod_projeto"> 
-                            <option value="" selected="">---------</option>
-                            {% for obj in projetos_ativos %}
+                        <select name="cod_projeto" class="select form-select" id="id_cod_projeto">
+                            {% for obj in projetos_final %}
                             <option value="{{obj.cod_projeto}}" selected="">{{obj.projeto}}</option>
-                            {% endfor %} 
+                            {% endfor %}
                         
                         </select>             
                     </div>
@@ -98,7 +97,7 @@
     
         <div class="sg-container mt-3 mx-1 mb-5" style="margin-bottom: 1px">
             <div class="sg-content">
-                <h3 class="text-center mt-1 ignore-on-print">Tabela</h3>
+                <h3 class="text-center mt-1 ignore-on-print">{{ projeto.cod_projeto }}</h3>
                 <table class="table table-Light table-bordered table-striped mb-3 mt-2 table-responsive table-hover" id="sg-table">
                     <thead class="table-dark">
                         <tr>
@@ -112,7 +111,7 @@
                         </tr>
                     </thead>
                     <tbody >
-                        {% for empresas in empresa %}
+                        {% for empresas in teste %}
                         <tr>
                             <td class="text-center col-md-1">{{empresas.cod_empresa}}</td>
                             <td class="editable" data-id="{{empresas.cod_empresa}}" data-type="empresa">{{empresas.empresa}}</td>

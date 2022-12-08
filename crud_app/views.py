@@ -10,6 +10,8 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 import datetime
 import csv
+from django.contrib import auth, messages
+
 
 
 class IndexView(TemplateView):
@@ -18,7 +20,6 @@ class IndexView(TemplateView):
 
 
 #############################     EMPRESA     #############################
-
 def ativos(request):
     if request.user.is_authenticated:
         id = request.user.id
@@ -32,17 +33,23 @@ def ativos(request):
         empresa_all = models.Empresas.objects.filter(cod_projeto__in=user)
         #        projetos_ativos = user_table.filter(ativo='1').values('cod_projeto') # ---> tabela só com ativos
 
-
-
+        projetos = request.POST.get('projeto', None)
         
+
+        #print(projeto)
         
-        print(user)
+        projetos_final = user_table.filter(cod_projeto=projetos).values() #
+        tabela_geral = user_table.filter(cod_projeto=projetos).values('cod_projeto') #
+        teste = models.Empresas.objects.filter(cod_projeto__in=tabela_geral)
+        print(teste)
         dados = {
             'projetos_ativos': projetos_ativos_select,
             'user': empresa_all,
-            'empresa': empresa
+            'empresa': empresa,
+            'projetos_final': projetos_final,
+            'teste': teste
         }
-        print('dashboard OK')
+       # print('dashboard OK')
         return render(request,'crud_app/empresa/tabela.html', dados)
 # ITEMS_PAGINA = 50
 
@@ -137,20 +144,26 @@ def insertempresa(request):
     cnpj = request.POST.get("cnpj")
     print(projeto)
 
-    try:    
-        #print(projeto,empresa,safegold_ger,cnpj)
-        empresa = models.Empresas(cod_projeto=projeto, empresa=empresa, safegold_ger=safegold_ger, cnpj=cnpj)
-        #print(empresa)
-        empresa.save()
-        empresa_data={"cod_empresa": empresa.cod_empresa,"data_cadastro":empresa.data_cadastro,"error":False,"errorMensage":"Empresa adicionada com Sucesso"}
-        empresa_data['detail'] = "<a href='/app/empresa/detail/"+str(empresa.pk)+"/' class='mx-3' title='Detalhar Conta'><i class='fa-solid fa-up-right-and-down-left-from-center'></i></a>"
-        empresa_data['delete'] = "<a href='/app/empresa/delete/"+str(empresa.pk)+"/' class='mx-3' title='Excluir Conta'><i class='fa-solid fa-trash-can'></i></a>"
-     
+    if models.Empresas.objects.filter(cnpj=cnpj).exists(): # ----> validação para cnpj existentes
+        messages.error(request, 'esse cnpj ja existe')
+    else:
 
-        return JsonResponse(empresa_data,safe=False)
-    except:
-        empresa_data={"error":True,"errorMensage":"Failed to add"}
-        return JsonResponse(empresa_data,safe=False)
+        try:    
+            #print(projeto,empresa,safegold_ger,cnpj)
+            empresa = models.Empresas(cod_projeto=projeto, empresa=empresa, safegold_ger=safegold_ger, cnpj=cnpj)
+            #print(empresa)
+            empresa.save()
+            empresa_data={"cod_empresa": empresa.cod_empresa,"data_cadastro":empresa.data_cadastro,"error":False,"errorMensage":"Empresa adicionada com Sucesso"}
+            empresa_data['detail'] = "<a href='/app/empresa/detail/"+str(empresa.pk)+"/' class='mx-3' title='Detalhar Conta'><i class='fa-solid fa-up-right-and-down-left-from-center'></i></a>"
+            empresa_data['delete'] = "<a href='/app/empresa/delete/"+str(empresa.pk)+"/' class='mx-3' title='Excluir Conta'><i class='fa-solid fa-trash-can'></i></a>"
+
+
+            return JsonResponse(empresa_data,safe=False)
+        except:
+            empresa_data={"error":True,"errorMensage":"Failed to add"}
+            return JsonResponse(empresa_data,safe=False)
+
+
 
 @csrf_exempt
 def update_all(request):

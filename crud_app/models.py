@@ -85,7 +85,7 @@ class Empresas(models.Model):
     data_cadastro = models.DateTimeField(auto_now_add=True)
     data_atualiza = models.DateTimeField(auto_now=True)
     safegold_ger = models.IntegerField(blank=True, null=True, default=1, choices=CHOICES_BOOL, verbose_name='Safegold Gerência? ')    
-    cnpj = models.CharField(max_length=255, blank=True, null=True)
+    cnpj = models.CharField(max_length=255, blank=True, null=True, unique=True)
 
     class Meta:
         managed = False
