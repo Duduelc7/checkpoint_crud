@@ -1,4 +1,4 @@
-from django.shortcuts import render , redirect
+from django.shortcuts import render , redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import (TemplateView,ListView,CreateView,DeleteView,UpdateView,DetailView)
 from . import models
@@ -51,69 +51,6 @@ def ativos(request):
         }
        # print('dashboard OK')
         return render(request,'crud_app/empresa/tabela.html', dados)
-# ITEMS_PAGINA = 50
-
-# class EmpresaListView(ListView):
-#     template_name = 'crud_app/empresa/tabela.html'
-#     model = models.Empresas
-#     paginate_by = ITEMS_PAGINA
-
-#     def get_queryset(self):
-#         queryset = super(EmpresaListView, self).get_queryset()
-
-#         data = self.request.GET
-#         search = data.get('empresa')
-        
-
-#         if search:
-#             queryset = queryset.filter(
-#                 Q(cod_empresa__icontains=search)|
-#                 Q(cod_projeto__icontains=search)| 
-#                 Q(empresa__icontains=search)|
-#                 Q(data_cadastr__icontains=search)|
-#                 Q(data_atualiz__icontains=search)|
-#                 Q(safegold_ger__icontains=search)|
-#                 Q(cnpj__icontains=search)
-
-#             )
-#         return queryset
-
-#     def get_context_data(self, **kwargs):
-#         context = super(EmpresaListView, self).get_context_data(**kwargs)
-#         context['form'] = EmpresaForm()
-#         return context
-    
-#     def projetos_ativos(self):
-
-#         if self.request.user.is_authenticated:
-#             id = self.request.user.id
-#             print(id)
-#             projetos = models.Projetos.objects.filter(id_user=id)
-#             ativos = models.Projetos.objects.filter(id_user = id)
-#             projetos_active = ativos.filter(ativo='1')
-#             print(projetos_active)
-#             context = {
-#                 'projetos': projetos,
-#                 'projetos_active': projetos_active
-#             }
-#             print('dashboard OK')
-#             return context
-
-
-# def cadastro_empresa(request):
-#     if request.POST:
-#         form = EmpresaForm(request.POST)
-#         if form.is_valid():           
-#             form.save()
-#         return redirect('crud_app:empresa-list')
-    
-#     return render(request,'crud_app/empresa/tabela.html', {'form': EmpresaForm})
-
-# def get_empresa(self, request):
-#     form = EmpresaForm(request.POST)
-#     if form.is_valid():
-#         teste = form.cleaned_data['empresa']
-#         print(teste)
 
 
 @csrf_exempt
@@ -142,10 +79,11 @@ def insertempresa(request):
     empresa = request.POST.get("empresa")
     safegold_ger = request.POST.get("safegold_ger")
     cnpj = request.POST.get("cnpj")
-    print(projeto)
-
+    print(len(cnpj))
     if models.Empresas.objects.filter(cnpj=cnpj).exists(): # ----> validação para cnpj existentes
         messages.error(request, 'esse cnpj ja existe')
+    # if len(cnpj) >= 17:
+    #     messages.error(request, 'invalido')
     else:
 
         try:    
@@ -182,26 +120,18 @@ def update_all(request):
         stuent_data={"error":True,"errorMessage":"Failed to Update Data"}
         return JsonResponse(stuent_data,safe=False)
 
-# @csrf_exempt
-# def delete_empresa(request):
-#     id=request.POST.get("cod_empresa")
-#     print(id)
-#     try:
-#         empresa=models.Empresas.objects.get(cod_empresa=id)
-#         empresa.delete()
-#         empresa_data={"error":False,"errorMessage":"Deleted Successfully"}
-#         return JsonResponse(empresa_data,safe=False)
-#     except:
-#         empresa_data={"error":True,"errorMessage":"Failed to Delete Data"}
-#         return JsonResponse(empresa_data,safe=False)
-
-
-
-    
-
-
-
-
+@csrf_exempt
+def delete_empresa(request):
+    id=request.POST.get("cod_empresa")
+    print(id)
+    try:
+        empresa=models.Empresas.objects.get(cod_empresa=id)
+        empresa.delete()
+        empresa_data={"error":False,"errorMessage":"Deleted Successfully"}
+        return JsonResponse(empresa_data,safe=False)
+    except:
+        empresa_data={"error":True,"errorMessage":"Failed to Delete Data"}
+        return JsonResponse(empresa_data,safe=False)
     
 class EmpresaCreateView(CreateView):
     template_name = 'crud_app/empresa/cadastro.html'
@@ -223,6 +153,8 @@ class EmpresaUpdateView(UpdateView):
 class EmpresaDetailView(DetailView):
     model = models.Empresas
     template_name = 'crud_app/empresa/detail.html'
+    success_url = reverse_lazy("crud_app:empresa-list")
+
 ###########################################################################
 
 #############################     PROJETO     #############################

@@ -55,8 +55,12 @@ def login(request):
             user = auth.authenticate(request, username=nome, password=senha)
             if user is not None:
                 auth.login(request, user)
+                request.session.set_test_cookie()
+                next_page = request.POST.get('next')
+                print(next_page)
                 print(f'Login de {nome} realizado com sucesso')
                 return redirect('dashboard')
+
         else:
             messages.error(request, 'O usuário não está cadastrado!')
             print('O usuário não está cadastrado!')
@@ -70,6 +74,9 @@ def logout(request):
 
 def dashboard(request):
     if request.user.is_authenticated:
+        if request.session.test_cookie_worked():
+            print ("The test cookie worked!!!")
+            request.session.delete_test_cookie()
         id = request.user.id
         projetos = Projetos.objects.filter(id_user=id).values()
         ativos = Projetos.objects.filter(id_user = id)
